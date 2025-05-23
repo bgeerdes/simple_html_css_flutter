@@ -114,16 +114,25 @@ class Parser {
 
     if (isLink) {
       return TextSpan(
-        style: textStyle,
-        text: text,
-        recognizer: TapGestureRecognizer()
-          ..onTap = () {
-            if (linksCallback != null) {
-              linksCallback!(link);
-            } else {
-              debugPrint('Add a link callback to visit ${link.toString()}');
-            }
-          },
+        children: [
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                onTap: () {
+                  if (linksCallback != null) {
+                    linksCallback!(link);
+                  } else {
+                    debugPrint('Add a link callback to visit ${link.toString()}');
+                  }
+                },
+                child: Text(text, style: textStyle),
+              ),
+            ),
+          ),
+        ],
       );
     }
     return TextSpan(style: textStyle, text: text);
@@ -329,7 +338,10 @@ class Parser {
 
       if (event is XmlTextEvent) {
         final TextSpan currentSpan = _handleText(event.value);
-        if (currentSpan.text?.isNotEmpty == true) {
+        if (
+          currentSpan.text?.isNotEmpty == true || 
+          currentSpan.children?.isNotEmpty == true
+        ) {
           spans.add(currentSpan);
         }
       }
