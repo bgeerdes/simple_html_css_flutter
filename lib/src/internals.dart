@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:xml/xml_events.dart';
 
